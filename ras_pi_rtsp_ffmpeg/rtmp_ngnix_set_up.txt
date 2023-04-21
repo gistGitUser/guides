@@ -1,0 +1,46 @@
+настройка rtmp сервера (https://www.8host.com/blog/nastrojka-servera-video-striminga-na-nginx-rtmp/)
+    - установки nginx rtmp
+    sudo apt update
+    sudo apt install libnginx-mod-rtmp
+
+    в конце файла
+        sudo nano /etc/nginx/nginx.conf
+    добавить
+
+    rtmp {
+            server {
+                    listen 1935;
+                    chunk_size 4096;
+                    allow publish 127.0.0.1;
+                    deny publish all;
+
+                    application live {
+                            live on;
+                            record off;
+                    }
+            }
+    }
+
+
+    - listen - порт прослушивания (1935 - стандарт)
+    - chunk_size - размер блоков которые отправляет rtmp
+
+    allow publish 127.0.0.1 и deny publish all
+    сервер разрешает публиковать видео
+    только на том же сервере, чтобы другие
+     пользователи не запускали тут свои стримы.
+    //это не мешает получать данные по не локальному ip
+    - rtmp://[ip-address]/live/stream555
+
+    live on включает режим live, чтобы несколько пользователей могли одновременно
+     подключаться к потоку (базовое условие для видеопотока).
+
+    Record off отключает функцию записи Nginx-RTMP, поэтому по
+     умолчанию все потоки не сохраняются отдельно на диск.
+
+    //открыть 1935 порт
+    sudo ufw allow 1935/tcp
+
+    sudo systemctl reload nginx.service
+
+    //после этого rtmp сервер должен заработать

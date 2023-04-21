@@ -1,0 +1,31 @@
+//скрипт взят отсюда
+https://www.stephenwagner.com/2016/11/10/rtsp-to-rtmp-ip-camera-to-youtube-live-streaming/
+
+1. ffmpeg -f v4l2 -i /dev/video0 -f lavfi -i anullsrc -profile:v high \
+  -pix_fmt yuvj420p -level:v 4.1 -preset ultrafast -tune zerolatency  \
+  -vcodec libx264 -r 10 -b:v 512k -s 640x360                          \
+  -acodec aac -strict -2 -ac 2 -ab 32k -ar 44100                      \
+  -f flv rtmp://[ip-address]:5935/live/livestream
+
+2. ffplay -fflags nobuffer  -i rtmp://[ip-address]:5935/live/livestream
+
+3. ffmpeg -fflags nobuffer -re                   \
+    -flags low_delay -strict experimental        \
+    -s 640x360                                   \
+    -probesize 500000 -fflags discardcorrupt     \
+    -avioflags direct -rtsp_transport tcp        \
+    -i rtsp://192.168.88.230:554/channel2        \
+    -vcodec libx264         -preset veryfast -vf setpts=0   \
+    -tune zerolatency -maxrate 480k -bufsize 0       \
+    -vf "format=yuv420p" -g 60 -c:a aac        \
+    -b:a 128k -ar 44100     -f flv rtmp://localhost/live/stream
+
+
+
+4. ffmpeg -rtsp_transport tcp -i rtsp://[ip-address]:554/channel2 -framerate 30 \
+  -video_size 1280x720 -vcodec libx264  -preset veryfast -maxrate 1984k \
+  -bufsize 3968k   -vf "format=yuv420p" -g 60 -c:a aac  \
+   -b:a 128k -ar 44100 -f flv rtmp://[ip-address]:5935/live/livestream
+   
+   
+5. ffmpeg -rtsp_transport tcp -i rtsp://192.168.88.230:554/channel2 -f lavfi -i anullsrc -profile:v high -pix_fmt yuvj420p -level:v 4.1 -preset ultrafast -tune zerolatency -vcodec libx264 -r 10 -b:v 512k  -s 640x360 -acodec aac -strict -2 -ac 2 -ab 32k -ar 44100 -f flv rtmp://[ip-address]:5935/live/livestream

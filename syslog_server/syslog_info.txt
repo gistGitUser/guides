@@ -1,0 +1,46 @@
+
+syslog - system logging protocol
+
+send system log/event msg to
+specific server(syslog server)
+from different design
+
+used in routers, scanners and other devices
+
+syslog totally async
+
+syslog consist of three parts:
+
+PRI: a calculated priority value
+Header: with identifying information
+MSG: message
+
+Facility Value (from 0(kernel msg) to 16-23(local use)
+1 - user-level msg
+11 ftp daemon
+
+severity msg
+
+0 Emergency - System is unusable
+1 Alert     - Action Must be taken immediately
+2 Critical  - Critical conditions
+3 Error     -
+4 Warning   -
+5 Notice    - Normal but significant condition
+6 Informational -
+7 Debug     -
+
+PRI = (facility value * 8) + Severity Value
+
+syslog send msg from device -> collector
+
+syslog can't request data for other server
+
+u can set correlation rules for security(i.e.)
+
+
+
+
+
+
+

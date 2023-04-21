@@ -1,0 +1,36 @@
+1) sudo apt install tor
+2) sudo apt install obfs4proxy
+3) service tor stop
+4) tor
+
+5) in not working, set bridge in /etc/tor/torrc
+# insert into end of file
+
+UseBridges 1
+ClientTransportPlugin obfs4 exec /usr/bin/obfs4proxy
+Bridge obfs4 5.161.95.47:443 8DE97C73627E1DC61B985AA4D86FEE7277C47301 cert=jyu/5qEKS0MlhLqS1h4H4qIqAgC9qqQVLqPe8ek8IUZl82Axq7Z+yFdG49IjZGPnHNN4IA iat-mode=0
+
+
+6) для поднятия нескольких прокси нужно 
+нужно создать новый файл с конфигом тора например torrc.1 
+и прописать в нём другую директорию для данных и сделать остальные
+нужные настройки
+
+DataDirectory /home/mos/softPackages/torDirs/proxy1
+
+
+7) запустить тор командой
+
+tor -f /etc/tor/torrc.1
+
+
+8) проверка того что всё нормально работает
+
+curl -x socks5h://localhost:9050 -s https://check.torproject.org/api/ip
+
+
+* пример контейнера с докером, можно допилить контроль размера логов
+https://github.com/zhaow-de/rotating-tor-http-proxy
+
+* tor man
+https://2019.www.torproject.org/docs/tor-manual.html.en
