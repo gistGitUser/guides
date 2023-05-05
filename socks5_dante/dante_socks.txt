@@ -1,0 +1,56 @@
+
+
+sudo apt install dante-server
+systemctl status danted.service
+sudo nano /etc/danted.conf
+sudo rm /etc/danted.conf
+
+
+
+sudo nano /etc/danted.conf
+#это в файл настройку засунуть
+```
+
+# The listening network interface or address.
+internal: 0.0.0.0 port=1080
+
+# The proxying network interface or address.
+external: enx00e04c6800d8
+
+# socks-rules determine what is proxied through the external interface.
+socksmethod: username
+
+# client-rules determine who can connect to the internal interface.
+clientmethod: none
+
+client pass {
+    from: 0.0.0.0/0 to: 0.0.0.0/0
+}
+
+socks pass {
+    from: 0.0.0.0/0 to: 0.0.0.0/0
+}
+```
+
+//новый пользователь для socks5 proxy
+useradd --shell /usr/sbin/nologin rootwelt
+passwd rootwelt
+
+//проверка работы
+curl --socks5 rootwelt:password@0.0.0.0:1080 check-host.net/ip
+
+//Вместо системных пользователей можно использовать 
+PAM файл с логинами и паролями (похоже на htpasswd).
+
+
+Для этого необходимо дополнительно установить 
+пакет libpam-pwdfile, а также заменить строку
+
+socksmethod: username
+socksmethod: pam.username
+
+//тут подробности если нужно
+https://rtfm.wiki/linux/dante
+
+
+
