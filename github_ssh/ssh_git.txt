@@ -1,0 +1,19 @@
+cd ~/.ssh
+
+# Use the ssh-keygen command to create GitHub SSH key pairs:
+ssh-keygen -o -t rsa -C "email@example.com"
+
+# -o flag forces the tool to generate SSH keys with the OpenSSH format
+# -t flag specifies they type of SSH keys to create
+# -C flag allows for comments that get added as metadata at the end of the public key
+
+
+cat id_rsa.pub
+
+# and push it github ssh key
+
+# check connection
+ssh -T git@github.com
+
+//Change the remote:
+git remote set-url origin git@github.com:USERNAME/OTHERREPOSITORY.git
